@@ -2,18 +2,18 @@
     "paths": [
         {
             "name": "/contact",
-            "lambdaFunction": "formfunction",
+            "lambdaFunction": "formfunction2",
             "privacy": {
                 "open": true
             },
             "policyResourceName": "/contact"
         }
     ],
-    "resourceName": "formapi",
-    "apiName": "formapi",
+    "resourceName": "formapi2",
+    "apiName": "formapi2",
     "functionArns": [
         {
-            "lambdaFunction": "formfunction"
+            "lambdaFunction": "formfunction2"
         }
     ],
     "privacy": {
@@ -25,7 +25,7 @@
     "dependsOn": [
         {
             "category": "function",
-            "resourceName": "formfunction",
+            "resourceName": "formfunction2",
             "attributes": [
                 "Name",
                 "Arn"

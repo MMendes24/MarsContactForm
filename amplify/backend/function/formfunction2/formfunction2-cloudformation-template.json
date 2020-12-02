@@ -9,18 +9,6 @@
     },
     "env": {
       "Type": "String"
-    },
-    "storageformtableName": {
-      "Type": "String",
-      "Default": "storageformtableName"
-    },
-    "storageformtableArn": {
-      "Type": "String",
-      "Default": "storageformtableArn"
-    },
-    "storageformtableStreamArn": {
-      "Type": "String",
-      "Default": "storageformtableArn"
     }
   },
   "Conditions": {
@@ -45,12 +33,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "formfunction",
+            "formfunction2",
             {
               "Fn::Join": [
                 "",
                 [
-                  "formfunction",
+                  "formfunction2",
                   "-",
                   {
                     "Ref": "env"
@@ -81,7 +69,7 @@
         "Timeout": "25",
         "Code": {
           "S3Bucket": "amplify-mkdecision1-dev-201214-deployment",
-          "S3Key": "amplify-builds/formfunction-613865374462746f6231-build.zip"
+          "S3Key": "amplify-builds/formfunction2-346f7739534137486f74-build.zip"
         }
       }
     },
@@ -91,12 +79,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "mkdecision1LambdaRole90009f09",
+            "mkdecision1LambdaRole9b1dde59",
             {
               "Fn::Join": [
                 "",
                 [
-                  "mkdecision1LambdaRole90009f09",
+                  "mkdecision1LambdaRole9b1dde59",
                   "-",
                   {
                     "Ref": "env"
@@ -165,59 +153,6 @@
             }
           ]
         }
-      }
-    },
-    "formtableTriggerPolicy": {
-      "DependsOn": [
-        "LambdaExecutionRole"
-      ],
-      "Type": "AWS::IAM::Policy",
-      "Properties": {
-        "PolicyName": "lambda-trigger-policy",
-        "Roles": [
-          {
-            "Ref": "LambdaExecutionRole"
-          }
-        ],
-        "PolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Action": [
-                "dynamodb:DescribeStream",
-                "dynamodb:GetRecords",
-                "dynamodb:GetShardIterator",
-                "dynamodb:ListStreams"
-              ],
-              "Resource": [
-                {
-                  "Ref": "storageformtableStreamArn"
-                }
-              ]
-            }
-          ]
-        }
-      }
-    },
-    "formtableTrigger": {
-      "Type": "AWS::Lambda::EventSourceMapping",
-      "DependsOn": [
-        "formtableTriggerPolicy"
-      ],
-      "Properties": {
-        "BatchSize": 100,
-        "Enabled": true,
-        "EventSourceArn": {
-          "Ref": "storageformtableStreamArn"
-        },
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "LambdaFunction",
-            "Arn"
-          ]
-        },
-        "StartingPosition": "LATEST"
       }
     }
   },
