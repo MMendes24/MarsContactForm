@@ -3,6 +3,8 @@ import React, { useState } from "react"
 // for styling and jsx
 import { Grid, TextField, Button, Dialog, Typography, DialogTitle } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles"
+import SendIcon from '@material-ui/icons/Send';
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import CheckIcon from "@material-ui/icons/Check";
 
 // for AWS
@@ -25,7 +27,7 @@ const initialErrValues = {
 const useStyles = makeStyles(theme => ({
     bigGrid: {
         height: "80vh"
-    }
+    },
 }))
 
 
@@ -45,27 +47,27 @@ const Form = () => {
             ...formValues,
             [name]: value
         })
-        let valid
+        let legit
         switch (name) {
             case "email":
-                valid = new RegExp(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/).test(value);
-                if (!valid) {
-                    setErrors({ ...errorValues, emailError: "Email must be a valid email address" });
+                legit = new RegExp(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/).test(value); // common email checking Regex
+                if (!legit) {
+                    setErrors({ ...errorValues, emailError: "Email must be legit" });
                 } else {
                     setErrors({ ...errorValues, emailError: "" });
                 }
                 break
             case "name":
-                valid = new RegExp(/^[A-Za-z]+$/).test(value);
-                if (!valid) {
-                    setErrors({ ...errorValues, nameError: "Name can only consist of alphabetic characters and is required" });
+                legit = new RegExp(/^[A-Za-z]+$/).test(value); // checks for special characters
+                if (!legit) {
+                    setErrors({ ...errorValues, nameError: "Alphabetical characters only" });
                 } else {
                     setErrors({ ...errorValues, nameError: "" });
                 }
                 break
             case "message":
                 if (value.length < 8) {
-                    setErrors({ ...errorValues, messageError: "Messages must be a minimum of 8 characters" });
+                    setErrors({ ...errorValues, messageError: "Minimum of 8 characters" });
                 } else {
                     setErrors({ ...errorValues, messageError: "" });
                 }
@@ -108,52 +110,54 @@ const Form = () => {
                 >
                     <Grid item>
                         <TextField
+                            className={classes.input}
                             error={!!errorValues.nameError}
                             helperText={errorValues.nameError}
-                            variant="outlined"
                             value={formValues.name}
                             onChange={handleChange}
-                            required
                             autoFocus
+                            variant="outlined"
                             id="name"
                             name="name"
                             label="Name"
+                            required
                         />
                     </Grid>
                     <Grid item>
                         <TextField
                             error={!!errorValues.emailError}
                             helperText={errorValues.emailError}
-                            variant="outlined"
                             value={formValues.email}
                             onChange={handleChange}
-                            required
+                            variant="outlined"
                             type="email"
                             id="email"
                             name="email"
                             label="Email"
+                            required
                         />
                     </Grid>
                     <Grid item>
                         <TextField
                             error={!!errorValues.messageError}
                             helperText={errorValues.messageError}
-                            variant="outlined"
-                            id="message"
-                            multiline
                             value={formValues.message}
                             onChange={handleChange}
-                            required
+                            multiline
                             rowsMax={8}
                             aria-label="clear textarea"
+                            variant="outlined"
+                            id="message"
                             placeholder="Message"
                             name="message"
+                            required
                         />
                     </Grid>
                 </Grid>
                 <Grid container justify="center" alignItems="center" spacing={3}>
                     <Grid item>
                         <Button
+                            className={classes.button}
                             disabled={
                                 formValues.name.length === 0 ||
                                 formValues.email.length === 0 ||
@@ -166,10 +170,11 @@ const Form = () => {
                             color="primary"
                             variant="contained"
                             size="large"
-                        > Send</Button>
+                        ><SendIcon />Send</Button>
                     </Grid>
                     <Grid item>
                         <Button
+                            className={classes.button}
                             disabled={
                                 formValues.name.length === 0 &&
                                 formValues.email.length === 0 &&
@@ -179,7 +184,7 @@ const Form = () => {
                             color="secondary"
                             variant="contained"
                             size="large"
-                        > Clear</Button>
+                        > <DeleteOutlineIcon />Clear</Button>
                     </Grid>
                     <Dialog
                         open={sent}
