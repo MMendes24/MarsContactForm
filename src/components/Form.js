@@ -2,7 +2,7 @@ import React, { useState } from "react"
 
 // for styling and jsx
 import { Grid, TextField, Button, Dialog, DialogContent, Typography, DialogTitle } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles'
 
 // for AWS
 import Amplify, { API } from 'aws-amplify'
@@ -38,7 +38,7 @@ const Form = () => {
     }
 
     // for handling form submission
-    const submitForm = (e) => {
+    const submitForm = e => {
         const data = {
             body: {
                 name: formValues.name,
@@ -47,7 +47,7 @@ const Form = () => {
             }
         }
         e.preventDefault()
-        API.post("formapi", "/contact", data)
+        API.post("formapi2", "/contact", data)
         setForm(initialValues)
         alert("Mail sent!")
     }
@@ -103,7 +103,7 @@ const Form = () => {
                 </Grid>
                 <Grid container justify='center' alignItems='center' spacing={3}>
                     <Grid item>
-                        <Button type="submit" color="primary" variant="contained" size="large">Submit</Button>
+                        <Button type="submit" color="primary" variant="contained" size="large">Send</Button>
                     </Grid>
                 </Grid>
             </form>
