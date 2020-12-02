@@ -1,12 +1,12 @@
 import React, { useState } from "react"
 
 // for styling and jsx
-import { Grid, TextField, Button, Dialog, DialogContent, Typography, DialogTitle } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles'
-import CheckIcon from '@material-ui/icons/Check';
+import { Grid, TextField, Button, Dialog, Typography, DialogTitle } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles"
+import CheckIcon from "@material-ui/icons/Check";
 
 // for AWS
-import Amplify, { API } from 'aws-amplify'
+import Amplify, { API } from "aws-amplify"
 import awsExports from "../aws-exports"
 Amplify.configure(awsExports)
 
@@ -24,7 +24,7 @@ const initialErrValues = {
 
 const useStyles = makeStyles(theme => ({
     bigGrid: {
-        height: '80vh'
+        height: "80vh"
     }
 }))
 
@@ -45,31 +45,31 @@ const Form = () => {
             ...formValues,
             [name]: value
         })
-        let valid;
+        let valid
         switch (name) {
-            case 'email':
+            case "email":
                 valid = new RegExp(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/).test(value);
                 if (!valid) {
-                    setErrors({ ...errorValues, emailError: 'Email must be a valid email address' });
+                    setErrors({ ...errorValues, emailError: "Email must be a valid email address" });
                 } else {
-                    setErrors({ ...errorValues, emailError: '' });
+                    setErrors({ ...errorValues, emailError: "" });
                 }
-                break;
-            case 'name':
+                break
+            case "name":
                 valid = new RegExp(/^[A-Za-z]+$/).test(value);
                 if (!valid) {
-                    setErrors({ ...errorValues, nameError: 'Name can only consist of alphabetic characters' });
+                    setErrors({ ...errorValues, nameError: "Name can only consist of alphabetic characters and is required" });
                 } else {
-                    setErrors({ ...errorValues, nameError: '' });
+                    setErrors({ ...errorValues, nameError: "" });
                 }
-                break;
-            case 'message':
+                break
+            case "message":
                 if (value.length < 8) {
-                    setErrors({ ...errorValues, messageError: 'Minimum of 8 characters' });
+                    setErrors({ ...errorValues, messageError: "Messages must be a minimum of 8 characters" });
                 } else {
-                    setErrors({ ...errorValues, messageError: '' });
+                    setErrors({ ...errorValues, messageError: "" });
                 }
-                break;
+                break
             default:
                 break;
         }
@@ -91,11 +91,15 @@ const Form = () => {
         setSent(true)
     }
 
+    const handleClear = e => {
+        e.preventDefault()
+        setForm(initialValues)
+    }
 
     return (
-        <Grid className={classes.bigGrid}container justify='center' direction="column" alignItems="center">
+        <Grid className={classes.bigGrid} container justify="center" direction="column" alignItems="center">
             <Typography variant="h3" gutterBottom>Contact MK Decision</Typography>
-            <form onSubmit={submitForm} noValidate autoComplete='off'>
+            <form onSubmit={submitForm} noValidate autoComplete="off">
                 <Grid
                     container
                     direction="column"
@@ -104,48 +108,56 @@ const Form = () => {
                 >
                     <Grid item>
                         <TextField
-                            variant='outlined'
+                            error={!!errorValues.nameError}
+                            helperText={errorValues.nameError}
+                            variant="outlined"
                             value={formValues.name}
                             onChange={handleChange}
                             required
                             autoFocus
-                            id='name'
-                            name='name'
-                            label='Name'
+                            id="name"
+                            name="name"
+                            label="Name"
                         />
                     </Grid>
                     <Grid item>
                         <TextField
-                            variant='outlined'
+                            error={!!errorValues.emailError}
+                            helperText={errorValues.emailError}
+                            variant="outlined"
                             value={formValues.email}
                             onChange={handleChange}
                             required
-                            type='email'
-                            id='email'
-                            name='email'
-                            label='Email'
+                            type="email"
+                            id="email"
+                            name="email"
+                            label="Email"
                         />
                     </Grid>
                     <Grid item>
                         <TextField
-                            variant='outlined'
-                            id='message'
+                            error={!!errorValues.messageError}
+                            helperText={errorValues.messageError}
+                            variant="outlined"
+                            id="message"
                             multiline
                             value={formValues.message}
                             onChange={handleChange}
+                            required
                             rowsMax={8}
-                            aria-label='clear textarea'
-                            placeholder='Message'
-                            name='message'
+                            aria-label="clear textarea"
+                            placeholder="Message"
+                            name="message"
                         />
                     </Grid>
                 </Grid>
-                <Grid container justify='center' alignItems='center' spacing={3}>
+                <Grid container justify="center" alignItems="center" spacing={3}>
                     <Grid item>
                         <Button
                             disabled={
                                 formValues.name.length === 0 ||
                                 formValues.email.length === 0 ||
+                                formValues.message.length === 0 ||
                                 errorValues.nameError.length !== 0 ||
                                 errorValues.emailError.length !== 0 ||
                                 errorValues.messageError.length !== 0
@@ -156,14 +168,27 @@ const Form = () => {
                             size="large"
                         > Send</Button>
                     </Grid>
+                    <Grid item>
+                        <Button
+                            disabled={
+                                formValues.name.length === 0 &&
+                                formValues.email.length === 0 &&
+                                formValues.message.length === 0
+                            }
+                            onClick={handleClear}
+                            color="secondary"
+                            variant="contained"
+                            size="large"
+                        > Clear</Button>
+                    </Grid>
                     <Dialog
                         open={sent}
                         onClose={() => {
                             setSent(false);
                         }}
-                        aria-labelledby='alert-dialog-title'
-                        aria-describedby='email sent confirmation'>
-                        <DialogTitle id='alert-dialog-title'>{'Message Sent'}<CheckIcon/></DialogTitle>
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="email sent confirmation">
+                        <DialogTitle id="alert-dialog-title">{"Message Sent"}<CheckIcon /></DialogTitle>
                     </Dialog>
                 </Grid>
             </form>
