@@ -1,12 +1,31 @@
-import React from "react"
+import React, { useState } from "react"
+
+// for styling and jsx
 import { Grid, TextField, Button, Dialog, DialogContent, Typography, DialogTitle } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+
+const initialValues = {
+    name: "",
+    email: "",
+    message: "",
+}
+
+const initialErrValues = {
+    nameErr: "",
+    emailErr: "",
+    messageErr: "",
+}
 
 const Form = () => {
+    const [formValues, setForm] = useState(initialValues)
+    const [errorValues, setErrors] = useState(initialErrValues)
+
+    // for use with material-ui
+
     return (
         <Grid
             container
             direction="column"
-            justify="center"
             alignItems="center"
         >
             <Typography variant="h3" gutterBottom>Contact MK Decision</Typography>
@@ -14,10 +33,53 @@ const Form = () => {
                 <Grid
                     container
                     direction="column"
-                    justify="center"
                     alignItems="center"
+                    spacing={4}
                 >
-
+                    <Grid item>
+                        <TextField
+                            variant='outlined'
+                            value={formValues.name}
+                            required
+                            autoFocus
+                            id='name'
+                            name='name'
+                            label='Name'
+                        />
+                    </Grid>
+                    <Grid item>
+                        <TextField
+                            variant='outlined'
+                            value={formValues.email}
+                            required
+                            type='email'
+                            id='email'
+                            name='email'
+                            label='Email'
+                        />
+                    </Grid>
+                    <Grid item>
+                        <TextField
+                            variant='outlined'
+                            id='message'
+                            multiline
+                            value={formValues.message}
+                            rowsMax={8}
+                            aria-label='clear textarea'
+                            placeholder='Message'
+                            name='message'
+                        />
+                    </Grid>
+                </Grid>
+                <Grid container justify='center' alignItems='center' spacing={3}>
+                    <Grid item>
+                        <Button
+                            color="primary"
+                            variant="contained"
+                            size="large"
+                        >
+                            Submit</Button>
+                    </Grid>
                 </Grid>
             </form>
         </Grid>
