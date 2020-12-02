@@ -77,7 +77,6 @@ const Form = () => {
         }
     };
 
-
     // for handling form submission
     const submitForm = e => {
         const data = {
@@ -150,6 +149,7 @@ const Form = () => {
                             id="message"
                             placeholder="Message"
                             name="message"
+                            label="Message"
                             required
                         />
                     </Grid>
@@ -169,7 +169,6 @@ const Form = () => {
                             type="submit"
                             color="primary"
                             variant="contained"
-                            size="large"
                         ><SendIcon />Send</Button>
                     </Grid>
                     <Grid item>
@@ -183,7 +182,6 @@ const Form = () => {
                             onClick={handleClear}
                             color="secondary"
                             variant="contained"
-                            size="large"
                         > <DeleteOutlineIcon />Clear</Button>
                     </Grid>
                     <Dialog
