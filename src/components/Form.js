@@ -4,6 +4,11 @@ import React, { useState } from "react"
 import { Grid, TextField, Button, Dialog, DialogContent, Typography, DialogTitle } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
+// for AWS
+import Amplify, { API } from 'aws-amplify'
+import awsExports from "../aws-exports"
+Amplify.configure(awsExports)
+
 const initialValues = {
     name: "",
     email: "",
@@ -34,7 +39,15 @@ const Form = () => {
 
     // for handling form submission
     const submitForm = (e) => {
+        const data = {
+            body: {
+                name: formValues.name,
+                email: formValues.email,
+                message: formValues.message,
+            }
+        }
         e.preventDefault()
+        API.post("formapi", "/contact", data)
         setForm(initialValues)
     }
 
@@ -89,7 +102,7 @@ const Form = () => {
                 </Grid>
                 <Grid container justify='center' alignItems='center' spacing={3}>
                     <Grid item>
-                        <Button color="primary" variant="contained" size="large">Submit</Button>
+                        <Button type="submit" color="primary" variant="contained" size="large">Submit</Button>
                     </Grid>
                 </Grid>
             </form>
