@@ -3,6 +3,7 @@ import React, { useState } from "react"
 // for styling and jsx
 import { Grid, TextField, Button, Dialog, DialogContent, Typography, DialogTitle } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles'
+import CheckIcon from '@material-ui/icons/Check';
 
 // for AWS
 import Amplify, { API } from 'aws-amplify'
@@ -21,12 +22,21 @@ const initialErrValues = {
     messageErr: "",
 }
 
+const useStyles = makeStyles(theme => ({
+    bigGrid: {
+        height: '80vh'
+    }
+}))
+
+
 const Form = () => {
     // state goes at top of component
     const [formValues, setForm] = useState(initialValues)
     const [errorValues, setErrors] = useState(initialErrValues)
+    const [sent, setSent] = useState(false);
 
     // for use with material-ui
+    const classes = useStyles();
 
     // for dealing with changes to form state
     const handleChange = e => {
@@ -78,12 +88,12 @@ const Form = () => {
         e.preventDefault()
         API.post("formapi2", "/contact", data)
         setForm(initialValues)
-        alert("Mail sent!")
+        setSent(true)
     }
 
 
     return (
-        <Grid container direction="column" alignItems="center">
+        <Grid className={classes.bigGrid}container justify='center' direction="column" alignItems="center">
             <Typography variant="h3" gutterBottom>Contact MK Decision</Typography>
             <form onSubmit={submitForm} noValidate autoComplete='off'>
                 <Grid
@@ -132,8 +142,29 @@ const Form = () => {
                 </Grid>
                 <Grid container justify='center' alignItems='center' spacing={3}>
                     <Grid item>
-                        <Button type="submit" color="primary" variant="contained" size="large">Send</Button>
+                        <Button
+                            disabled={
+                                formValues.name.length === 0 ||
+                                formValues.email.length === 0 ||
+                                errorValues.nameError.length !== 0 ||
+                                errorValues.emailError.length !== 0 ||
+                                errorValues.messageError.length !== 0
+                            }
+                            type="submit"
+                            color="primary"
+                            variant="contained"
+                            size="large"
+                        > Send</Button>
                     </Grid>
+                    <Dialog
+                        open={sent}
+                        onClose={() => {
+                            setSent(false);
+                        }}
+                        aria-labelledby='alert-dialog-title'
+                        aria-describedby='email sent confirmation'>
+                        <DialogTitle id='alert-dialog-title'>{'Message Sent'}<CheckIcon/></DialogTitle>
+                    </Dialog>
                 </Grid>
             </form>
         </Grid>
