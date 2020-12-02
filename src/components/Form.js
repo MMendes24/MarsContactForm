@@ -17,19 +17,32 @@ const initialErrValues = {
 }
 
 const Form = () => {
+    // state goes at top of component
     const [formValues, setForm] = useState(initialValues)
     const [errorValues, setErrors] = useState(initialErrValues)
 
     // for use with material-ui
 
+    // for dealing with changes to form state
+    const handleChange = e => {
+        const { name, value } = e.target;
+        setForm({
+            ...formValues,
+            [name]: value
+        })
+    }
+
+    // for handling form submission
+    const submitForm = (e) => {
+        e.preventDefault()
+        setForm(initialValues)
+    }
+
+
     return (
-        <Grid
-            container
-            direction="column"
-            alignItems="center"
-        >
+        <Grid container direction="column" alignItems="center">
             <Typography variant="h3" gutterBottom>Contact MK Decision</Typography>
-            <form>
+            <form onSubmit={submitForm} noValidate autoComplete='off'>
                 <Grid
                     container
                     direction="column"
@@ -40,6 +53,7 @@ const Form = () => {
                         <TextField
                             variant='outlined'
                             value={formValues.name}
+                            onChange={handleChange}
                             required
                             autoFocus
                             id='name'
@@ -51,6 +65,7 @@ const Form = () => {
                         <TextField
                             variant='outlined'
                             value={formValues.email}
+                            onChange={handleChange}
                             required
                             type='email'
                             id='email'
@@ -64,6 +79,7 @@ const Form = () => {
                             id='message'
                             multiline
                             value={formValues.message}
+                            onChange={handleChange}
                             rowsMax={8}
                             aria-label='clear textarea'
                             placeholder='Message'
@@ -73,12 +89,7 @@ const Form = () => {
                 </Grid>
                 <Grid container justify='center' alignItems='center' spacing={3}>
                     <Grid item>
-                        <Button
-                            color="primary"
-                            variant="contained"
-                            size="large"
-                        >
-                            Submit</Button>
+                        <Button color="primary" variant="contained" size="large">Submit</Button>
                     </Grid>
                 </Grid>
             </form>
