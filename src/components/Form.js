@@ -49,6 +49,7 @@ const Form = () => {
         e.preventDefault()
         API.post("formapi", "/contact", data)
         setForm(initialValues)
+        alert("Mail sent!")
     }
 
 
