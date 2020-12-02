@@ -9,6 +9,18 @@
     },
     "env": {
       "Type": "String"
+    },
+    "storageformtableName": {
+      "Type": "String",
+      "Default": "storageformtableName"
+    },
+    "storageformtableArn": {
+      "Type": "String",
+      "Default": "storageformtableArn"
+    },
+    "storageformtableStreamArn": {
+      "Type": "String",
+      "Default": "storageformtableArn"
     }
   },
   "Conditions": {
@@ -69,7 +81,7 @@
         "Timeout": "25",
         "Code": {
           "S3Bucket": "amplify-mkdecision1-dev-201214-deployment",
-          "S3Key": "amplify-builds/formfunction-6d556f776953364a3530-build.zip"
+          "S3Key": "amplify-builds/formfunction-613865374462746f6231-build.zip"
         }
       }
     },
@@ -153,6 +165,59 @@
             }
           ]
         }
+      }
+    },
+    "formtableTriggerPolicy": {
+      "DependsOn": [
+        "LambdaExecutionRole"
+      ],
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "lambda-trigger-policy",
+        "Roles": [
+          {
+            "Ref": "LambdaExecutionRole"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:DescribeStream",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:ListStreams"
+              ],
+              "Resource": [
+                {
+                  "Ref": "storageformtableStreamArn"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "formtableTrigger": {
+      "Type": "AWS::Lambda::EventSourceMapping",
+      "DependsOn": [
+        "formtableTriggerPolicy"
+      ],
+      "Properties": {
+        "BatchSize": 100,
+        "Enabled": true,
+        "EventSourceArn": {
+          "Ref": "storageformtableStreamArn"
+        },
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "LambdaFunction",
+            "Arn"
+          ]
+        },
+        "StartingPosition": "LATEST"
       }
     }
   },

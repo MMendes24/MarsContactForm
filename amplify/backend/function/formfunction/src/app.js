@@ -38,7 +38,7 @@ function id() {
 app.post("/contact", (req, res) => {
   console.log(req)
   let params = {
-    TableName: process.env.STORAGE_FORMTABLE_NAME,
+    TableName: process.env.STORAGE_FORMTABLE_NAME || "formtable-dev",
     Item: {
       id: id(),
       name: req.body.name,
