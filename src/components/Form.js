@@ -35,7 +35,36 @@ const Form = () => {
             ...formValues,
             [name]: value
         })
-    }
+        let valid;
+        switch (name) {
+            case 'email':
+                valid = new RegExp(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/).test(value);
+                if (!valid) {
+                    setErrors({ ...errorValues, emailError: 'Email must be a valid email address' });
+                } else {
+                    setErrors({ ...errorValues, emailError: '' });
+                }
+                break;
+            case 'name':
+                valid = new RegExp(/^[A-Za-z]+$/).test(value);
+                if (!valid) {
+                    setErrors({ ...errorValues, nameError: 'Name can only consist of alphabetic characters' });
+                } else {
+                    setErrors({ ...errorValues, nameError: '' });
+                }
+                break;
+            case 'message':
+                if (value.length < 8) {
+                    setErrors({ ...errorValues, messageError: 'Minimum of 8 characters' });
+                } else {
+                    setErrors({ ...errorValues, messageError: '' });
+                }
+                break;
+            default:
+                break;
+        }
+    };
+
 
     // for handling form submission
     const submitForm = e => {
