@@ -99,7 +99,7 @@ const Form = () => {
 
     return (
         <Grid className={classes.bigGrid} container justify="center" direction="column" alignItems="center">
-            <Typography variant="h3" gutterBottom>Contact MK Decision</Typography>
+            <Typography variant="h3" gutterBottom>Contact Mars Mendes</Typography>
             <form onSubmit={submitForm} noValidate autoComplete="off">
                 <Grid
                     container
