@@ -28,6 +28,9 @@ const useStyles = makeStyles(theme => ({
     bigGrid: {
         height: "80vh"
     },
+    button: {
+        marginTop: "1.3rem"
+    }
 }))
 
 
@@ -58,7 +61,7 @@ const Form = () => {
                 }
                 break
             case "name":
-                legit = new RegExp(/^[A-Za-z]+$/).test(value); // checks for special characters
+                legit = new RegExp(/^([a-zA-Z ]){2,30}$/).test(value); // checks for special characters
                 if (!legit) {
                     setErrors({ ...errorValues, nameError: "Alphabetical characters only" });
                 } else {
@@ -99,13 +102,13 @@ const Form = () => {
 
     return (
         <Grid className={classes.bigGrid} container justify="center" direction="column" alignItems="center">
-            <Typography variant="h3" gutterBottom>Contact Mars Mendes</Typography>
+            <Typography variant="h2" gutterBottom>Contact Mars</Typography>
             <form onSubmit={submitForm} noValidate autoComplete="off">
                 <Grid
                     container
                     direction="column"
                     alignItems="center"
-                    spacing={4}
+                    spacing={5}
                 >
                     <Grid item>
                         <TextField
@@ -143,6 +146,7 @@ const Form = () => {
                             value={formValues.message}
                             onChange={handleChange}
                             multiline
+                            rowsMin={4}
                             rowsMax={8}
                             aria-label="clear textarea"
                             variant="outlined"
@@ -168,8 +172,10 @@ const Form = () => {
                             }
                             type="submit"
                             color="primary"
-                            variant="contained"
-                        ><SendIcon />Send</Button>
+                            size="small"
+                            variant="outlined"
+                            startIcon={<SendIcon />}
+                        >Send</Button>
                     </Grid>
                     <Grid item>
                         <Button
@@ -181,8 +187,10 @@ const Form = () => {
                             }
                             onClick={handleClear}
                             color="secondary"
+                            size="small"
                             variant="contained"
-                        > <DeleteOutlineIcon />Clear</Button>
+                            startIcon={<DeleteOutlineIcon />}
+                        > Clear</Button>
                     </Grid>
                     <Dialog
                         open={sent}
