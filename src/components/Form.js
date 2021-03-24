@@ -28,6 +28,9 @@ const useStyles = makeStyles(theme => ({
     bigGrid: {
         height: "80vh"
     },
+    button: {
+        marginTop: "1.3rem"
+    }
 }))
 
 
@@ -105,7 +108,7 @@ const Form = () => {
                     container
                     direction="column"
                     alignItems="center"
-                    spacing={4}
+                    spacing={5}
                 >
                     <Grid item>
                         <TextField
