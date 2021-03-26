@@ -38,7 +38,8 @@ const Form = () => {
     // state goes at top of component
     const [formValues, setForm] = useState(initialValues)
     const [errorValues, setErrors] = useState(initialErrValues)
-    const [sent, setSent] = useState(false);
+    const [sent, setSent] = useState(false)
+    const [clear, setClear] = useState(false)
 
     // for use with material-ui
     const classes = useStyles();
@@ -50,19 +51,19 @@ const Form = () => {
             ...formValues,
             [name]: value
         })
-        let legit
+        let valid
         switch (name) {
             case "email":
-                legit = new RegExp(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/).test(value); // common email checking Regex
-                if (!legit) {
+                valid = new RegExp(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/).test(value); // common email checking Regex
+                if (!valid) {
                     setErrors({ ...errorValues, emailError: "Email must be valid" });
                 } else {
                     setErrors({ ...errorValues, emailError: "" });
                 }
                 break
             case "name":
-                legit = new RegExp(/^([a-zA-Z ]){2,30}$/).test(value); // checks for special characters
-                if (!legit) {
+                valid = new RegExp(/^([a-zA-Z ]){2,30}$/).test(value); // checks for special characters
+                if (!valid) {
                     setErrors({ ...errorValues, nameError: "Alphabetical characters only" });
                 } else {
                     setErrors({ ...errorValues, nameError: "" });
@@ -98,12 +99,13 @@ const Form = () => {
     const handleClear = e => {
         e.preventDefault()
         setForm(initialValues)
+        setClear(true)
     }
 
     return (
         <Grid className={classes.bigGrid} container justify="center" direction="column" alignItems="center">
-            <Typography variant="h2" gutterBottom>Contact Mars</Typography>
             <form onSubmit={submitForm} noValidate autoComplete="off">
+            <Typography variant="h2" gutterBottom>Contact Mars</Typography>
                 <Grid
                     container
                     direction="column"
@@ -198,8 +200,17 @@ const Form = () => {
                             setSent(false);
                         }}
                         aria-labelledby="alert-dialog-title"
-                        aria-describedby="email sent confirmation">
-                        <DialogTitle id="alert-dialog-title">{"Message Sent"}<CheckIcon /></DialogTitle>
+                        aria-describedby="Email sent!">
+                        <DialogTitle id="alert-dialog-title">{"Message Sent"} <CheckIcon /></DialogTitle>
+                    </Dialog>
+                    <Dialog
+                        open={clear}
+                        onClose={() => {
+                            setClear(false);
+                        }}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="Form cleared!">
+                        <DialogTitle id="alert-dialog-title" >{"Form cleared"} <CheckIcon /></DialogTitle>
                     </Dialog>
                 </Grid>
             </form>
