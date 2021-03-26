@@ -55,7 +55,7 @@ const Form = () => {
             case "email":
                 legit = new RegExp(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/).test(value); // common email checking Regex
                 if (!legit) {
-                    setErrors({ ...errorValues, emailError: "Email must be legit" });
+                    setErrors({ ...errorValues, emailError: "Email must be valid" });
                 } else {
                     setErrors({ ...errorValues, emailError: "" });
                 }
